@@ -52,3 +52,66 @@ def bin2dec(bin):
 
 
 assert bin2dec([1, 0, 0, 1, 0, 1]) == 37
+
+
+def addbin(bin1: list, bin2: list):
+
+    minBin = None
+    maxBin = None
+
+    lens = [len(bin1), len(bin2)]
+
+    if lens[0] <= lens[1]:
+        lenDiff = lens[1] - lens[0]
+        minBin = bin1.copy()
+        maxBin = bin2
+    else:
+        lenDiff = lens[0] - lens[1]
+        minBin = bin2.copy()
+        maxBin = bin1
+
+    for _ in range(0, lenDiff):
+        minBin.insert(0, 0)
+
+    # print(minBin, maxBin)
+
+    sbin = []
+    c = 0  # carry
+    i = len(minBin) - 1
+    while i >= 0:
+        r = minBin[i] + maxBin[i]
+        if r == 0:  # les deux bits sont a 0
+            if c == 0:
+                sbin.append(0)
+            else:
+                sbin.append(1)
+                c = 0  # si on a 0, on garde a carry
+        elif r == 1:  # un des deux bits est a 1
+            if c == 0:
+                sbin.append(1)
+            else:
+                sbin.append(0)
+                # on garde le carry
+        else:  # les deux bits sont a 1
+            if c == 0:
+                sbin.append(0)
+                c = 1
+            else:
+                sbin.append(1)
+                # on garde le carry
+
+        i -= 1
+
+    if c == 1:
+        sbin.append(1)
+
+    sbin.reverse()
+
+    return sbin
+
+
+bin1 = [1, 0, 0, 1]
+bin2 = [1, 0, 1]
+res = addbin(bin1, bin2)
+print(bin1, "+", bin2, "=", res)
+print(bin2dec(bin1), "+", bin2dec(bin2), "=", bin2dec(res))
