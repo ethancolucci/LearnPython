@@ -36,7 +36,7 @@ def comp1(bn):
     return bin
 
 
-assert comp1(dec2bin(11)) == [0, 1, 0, 0]
+assert comp1(dec2bin(4)) == [0, 1, 0, 0]
 
 
 def bin2dec(bin):
