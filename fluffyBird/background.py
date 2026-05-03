@@ -1,12 +1,13 @@
 import pygame
 import config
+from state import State
 from dataclasses import dataclass
 
 
 @dataclass
 class Background:
 
-    def init(self):
+    def __init__(self):
         self.clouds = pygame.image.load(
             "fluffyBird/assets/images/Clouds.png"
         ).convert_alpha()
@@ -41,25 +42,28 @@ class Background:
     def _drawSprites(
         self,
         screen: pygame.Surface,
+        state: State,
         image: pygame.Surface,
         images_arr: list[pygame.Rect],
     ):
-        if images_arr[0].right <= 0:
-            first_rect = images_arr.pop(0)
+        if not state.pause:
+            if images_arr[0].right <= 0:
+                first_rect = images_arr.pop(0)
 
-            new_rect = image.get_rect()
-            new_rect.topleft = (config.SCREEN_WIDTH, first_rect.y)
+                new_rect = image.get_rect()
+                new_rect.topleft = (config.SCREEN_WIDTH, first_rect.y)
 
-            images_arr.append(new_rect)
+                images_arr.append(new_rect)
 
         for rect in images_arr:
-            rect.x -= config.BG_SPEED
+            if not state.pause:
+                rect.x -= config.BG_SPEED
             screen.blit(image, rect)
 
-    def draw(self, screen: pygame.Surface):
+    def draw(self, screen: pygame.Surface, state: State):
 
         pygame.draw.rect(screen, (30, 140, 184), self.sky_rect)
         pygame.draw.rect(screen, (4, 112, 236), self.sea_rect)
 
-        self._drawSprites(screen, self.clouds, self.clouds_arr)
-        self._drawSprites(screen, self.grass, self.grass_arr)
+        self._drawSprites(screen, state, self.clouds, self.clouds_arr)
+        self._drawSprites(screen, state, self.grass, self.grass_arr)
