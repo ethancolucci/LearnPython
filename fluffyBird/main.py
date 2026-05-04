@@ -1,8 +1,10 @@
 import pygame
 import config
-from background import Background
-from bird import Bird
+
 from state import State
+from background import Background
+from treeSpawner import TreeSpawner
+from bird import Bird
 
 pygame.init()
 
@@ -11,9 +13,11 @@ pygame.display.set_caption("Fluffy Bird")
 
 clock = pygame.time.Clock()
 
-bg = Background()
-bird = Bird()
 state = State()
+
+bg = Background()
+treeSpawner = TreeSpawner()
+bird = Bird()
 
 pause_overlay = pygame.Surface(
     (config.SCREEN_WIDTH, config.SCREEN_HEIGHT), pygame.SRCALPHA
@@ -33,11 +37,13 @@ while running:
             elif event.key == pygame.K_SPACE:
                 bird.jump(state)
 
+    treeSpawner.update(state)
     bird.update(state)
 
     screen.fill((0, 0, 0))
 
     bg.draw(screen, state)
+    treeSpawner.draw(screen, state)
     bird.draw(screen)
 
     if state.pause:
