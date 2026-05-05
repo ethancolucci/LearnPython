@@ -1,5 +1,7 @@
 import pygame
 import config
+import utils
+
 from state import State
 from dataclasses import dataclass
 
@@ -44,4 +46,4 @@ class Bird:
             self.velocity_y = config.MAX_VELOCITY
 
     def draw(self, screen: pygame.Surface):
-        screen.blit(self.image, self.rect)
+        utils.draw(screen, self.image, self.rect)

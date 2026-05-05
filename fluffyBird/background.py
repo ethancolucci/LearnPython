@@ -1,5 +1,7 @@
 import pygame
 import config
+import utils
+
 from state import State
 from dataclasses import dataclass
 
@@ -58,7 +60,7 @@ class Background:
         for rect in images_arr:
             if not state.pause:
                 rect.x -= config.BG_SPEED
-            screen.blit(image, rect)
+            utils.draw(screen, image, rect)
 
     def draw(self, screen: pygame.Surface, state: State):
 

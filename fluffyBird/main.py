@@ -1,5 +1,6 @@
 import pygame
 import config
+import utils
 
 from state import State
 from background import Background
@@ -47,7 +48,7 @@ while running:
     bird.draw(screen)
 
     if state.pause:
-        screen.blit(pause_overlay, (0, 0))
+        utils.draw(screen, pause_overlay, (0, 0))
 
     pygame.display.flip()
 
