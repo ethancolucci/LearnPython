@@ -27,7 +27,7 @@ pause_overlay.fill((0, 0, 0, 125))
 
 running = True
 while running:
-    clock.tick(60)
+    clock.tick(config.FPS)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
