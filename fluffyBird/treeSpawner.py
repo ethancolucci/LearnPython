@@ -13,11 +13,9 @@ class TreeSpawner:
     trees: list[tuple[pygame.Surface, pygame.Rect]]
 
     def __init__(self):
-        self.image = pygame.image.load(
-            "fluffyBird/assets/images/Logs.png"
-        ).convert_alpha()
+        self.image = pygame.image.load("assets/images/Logs.png").convert_alpha()
 
-        self.frame_width = self.image.get_width() // 6
+        self.frame_width = self.image.get_width() // 4
         self.frame_height = self.image.get_height()
 
         self.trees = []
@@ -34,17 +32,34 @@ class TreeSpawner:
 
         return img, rect
 
-    def _spawnTrees(self):
-        image, rect = self._createTree(0)
-        rect.left = config.SCREEN_WIDTH + 50
-        rect.top = -50
+    def _get_random_tree_y(self) -> int:
+        height = randint(0, 3)
+        if height == 0:
+            return 200
+        elif height == 1:
+            return 120
+        else:
+            return 60
 
-        self.trees.append((image, rect))
-        # choose to spawn 1 or 2 trees ?
-        # create tree-s - self._createTree()
-        # choose tree-s size-s (small, average or high) - rect.y
-        # place tree-s (rect.x and rect.y)
-        # push image and rect into self.images and self.rects
+    def _spawnTrees(self):
+
+        start_x = config.SCREEN_WIDTH + 50
+
+        # upper tree
+        r1 = randint(0, 4)
+        if r1 != 3:
+            image, rect = self._createTree(randint(0, 3))
+            rect.left = start_x
+            rect.top = self._get_random_tree_y() * -1
+            self.trees.append((image, rect))
+
+        # bottom tree
+        r2 = randint(0, 4)
+        if r2 != 3:
+            image, rect = self._createTree(randint(0, 3))
+            rect.left = start_x
+            rect.bottom = config.SCREEN_HEIGHT + self._get_random_tree_y()
+            self.trees.append((image, rect))
 
     def _removeOldTrees(self):
         new_trees: list[tuple[pygame.Surface, pygame.Rect]] = []
@@ -61,11 +76,15 @@ class TreeSpawner:
         if state.pause:
             return
 
-        # do we have to spawn a new tree? (or two)
-        r = randint(0, config.TREE_SPAWN_PROB)
-        if r == 0:
-            now = time()
-            if now - self.last_spawn_time > 1:
+        # do we have to spawn a new trees?
+        now = time()
+        last_spawn_time_diff = now - self.last_spawn_time
+        if last_spawn_time_diff >= 1.5:
+            self._spawnTrees()
+            self.last_spawn_time = now
+        else:
+            r = randint(0, config.TREE_SPAWN_PROB)
+            if r == 0 and last_spawn_time_diff >= 1:
                 self._spawnTrees()
                 self.last_spawn_time = now
 
@@ -74,8 +93,6 @@ class TreeSpawner:
 
         # move actual trees on the screen (as bg clouds/grass)
         self._moveTrees()
-
-        print(len(self.trees))
 
     def draw(self, screen: pygame.Surface, state: State):
         for image, rect in self.trees:

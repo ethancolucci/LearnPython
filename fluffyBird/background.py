@@ -10,12 +10,8 @@ from dataclasses import dataclass
 class Background:
 
     def __init__(self):
-        self.clouds = pygame.image.load(
-            "fluffyBird/assets/images/Clouds.png"
-        ).convert_alpha()
-        self.grass = pygame.image.load(
-            "fluffyBird/assets/images/Grass.png"
-        ).convert_alpha()
+        self.clouds = pygame.image.load("assets/images/Clouds.png").convert_alpha()
+        self.grass = pygame.image.load("assets/images/Grass.png").convert_alpha()
 
         self.sky_rect = (0, 0, config.SCREEN_WIDTH, self.clouds.get_height())
         self.sea_rect = (

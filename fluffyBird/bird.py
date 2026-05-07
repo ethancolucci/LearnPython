@@ -10,7 +10,7 @@ from dataclasses import dataclass
 class Bird:
 
     def __init__(self):
-        image = pygame.image.load("fluffyBird/assets/images/Bird.png").convert_alpha()
+        image = pygame.image.load("assets/images/Bird.png").convert_alpha()
 
         self.frame_width = image.get_width() // 2
         self.frame_height = image.get_height() // 2
