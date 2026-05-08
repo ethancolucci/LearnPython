@@ -10,14 +10,10 @@ from dataclasses import dataclass
 class Background:
 
     def __init__(self):
-        self.clouds = pygame.image.load(
-            "fluffyBird/assets/images/Clouds.png"
-        ).convert_alpha()
-        self.grass = pygame.image.load(
-            "fluffyBird/assets/images/Grass.png"
-        ).convert_alpha()
+        self.clouds = pygame.image.load(config.BG_CLOUDS_IMAGE_PATH).convert_alpha()
+        self.grass = pygame.image.load(config.BG_GRASS_IMAGE_PATH).convert_alpha()
 
-        self.sky_rect = (0, 0, config.SCREEN_WIDTH, self.clouds.get_height())
+        self.sky_rect = (0, 0, config.SCREEN_WIDTH, self.clouds.get_height() - 100)
         self.sea_rect = (
             0,
             self.sky_rect[3],
@@ -64,8 +60,8 @@ class Background:
 
     def draw(self, screen: pygame.Surface, state: State):
 
-        pygame.draw.rect(screen, (30, 140, 184), self.sky_rect)
-        pygame.draw.rect(screen, (4, 112, 236), self.sea_rect)
+        pygame.draw.rect(screen, config.SKY_COLOR, self.sky_rect)
+        pygame.draw.rect(screen, config.SEA_COLOR, self.sea_rect)
 
         self._drawSprites(screen, state, self.clouds, self.clouds_arr)
         self._drawSprites(screen, state, self.grass, self.grass_arr)

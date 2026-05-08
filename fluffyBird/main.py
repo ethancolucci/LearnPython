@@ -9,7 +9,9 @@ from bird import Bird
 
 pygame.init()
 
-screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT))
+screen_size = (config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
+
+screen = pygame.display.set_mode(screen_size)
 pygame.display.set_caption("Fluffy Bird")
 
 clock = pygame.time.Clock()
