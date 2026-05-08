@@ -13,7 +13,7 @@ class TreeSpawner:
     trees: list[tuple[pygame.Surface, pygame.Rect]]
 
     def __init__(self):
-        self.image = pygame.image.load("assets/images/Logs.png").convert_alpha()
+        self.image = pygame.image.load(config.TREE_IMAGE_PATH).convert_alpha()
 
         self.frame_width = self.image.get_width() // 4
         self.frame_height = self.image.get_height()
@@ -26,7 +26,12 @@ class TreeSpawner:
             raise Exception("Frame must be [0, 3]")
 
         img = self.image.subsurface(
-            (frame * self.frame_width, 0, self.frame_width, self.frame_height)
+            (
+                frame * self.frame_width,
+                0,
+                self.frame_width,
+                self.frame_height,
+            )
         )
         rect = img.get_rect()
 
@@ -72,6 +77,14 @@ class TreeSpawner:
         for _, rect in self.trees:
             rect.x -= config.TREE_VELOCITY
 
+    def _getTreeCollisionRect(self, rect: pygame.Rect) -> pygame.Rect:
+        return pygame.Rect(
+            rect.left + config.TREE_COLLISION_PADDING,
+            rect.top + config.TREE_COLLISION_PADDING,
+            rect.width - 2 * config.TREE_COLLISION_PADDING,
+            rect.height - 2 * config.TREE_COLLISION_PADDING,
+        )
+
     def update(self, state: State):
         if state.pause:
             return
@@ -97,3 +110,8 @@ class TreeSpawner:
     def draw(self, screen: pygame.Surface, state: State):
         for image, rect in self.trees:
             utils.draw(screen, image, rect)
+
+            # debug draw collision rect
+            if config.DEBUG:
+                collision_rect = self._getTreeCollisionRect(rect)
+                pygame.draw.rect(screen, (255, 0, 0), collision_rect, 2)
