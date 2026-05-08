@@ -63,7 +63,7 @@ class TreeSpawner:
 
         # do we have to spawn a new tree? (or two)
         r = randint(0, config.TREE_SPAWN_PROB)
-        if r == 0:
+        if r == 0:  # could be any value in [0,config.TREE_SPAWN_PROB[
             now = time()
             if now - self.last_spawn_time > 1:
                 self._spawnTrees()
