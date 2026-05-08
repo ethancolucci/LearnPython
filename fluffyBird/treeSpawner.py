@@ -78,11 +78,13 @@ class TreeSpawner:
             rect.x -= config.TREE_VELOCITY
 
     def update(self, state: State):
+        now = time()
+
         if state.pause:
+            self.last_spawn_time = now
             return
 
         # do we have to spawn a new trees?
-        now = time()
         last_spawn_time_diff = now - self.last_spawn_time
         if last_spawn_time_diff >= 1.5:
             self._spawnTrees()
@@ -99,7 +101,7 @@ class TreeSpawner:
         # move actual trees on the screen (as bg clouds/grass)
         self._moveTrees()
 
-    def draw(self, screen: pygame.Surface, state: State):
+    def draw(self, screen: pygame.Surface):
         for image, rect in self.trees:
             utils.draw(screen, image, rect)
 

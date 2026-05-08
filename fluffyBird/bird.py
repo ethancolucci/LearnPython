@@ -3,10 +3,8 @@ import config
 import utils
 
 from state import State
-from dataclasses import dataclass
 
 
-@dataclass
 class Bird:
 
     def __init__(self):

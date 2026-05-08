@@ -3,10 +3,8 @@ import config
 import utils
 
 from state import State
-from dataclasses import dataclass
 
 
-@dataclass
 class Background:
 
     def __init__(self):
@@ -37,31 +35,44 @@ class Background:
             rect.topleft = (i * rect.width, y)
             images_arr.append(rect)
 
-    def _drawSprites(
+    def _updateSprites(
         self,
-        screen: pygame.Surface,
         state: State,
         image: pygame.Surface,
         images_arr: list[pygame.Rect],
     ):
-        if not state.pause:
-            if images_arr[0].right <= 0:
-                first_rect = images_arr.pop(0)
+        if images_arr[0].right <= 0:
+            first_rect = images_arr.pop(0)
 
-                new_rect = image.get_rect()
-                new_rect.topleft = (config.SCREEN_WIDTH, first_rect.y)
+            new_rect = image.get_rect()
+            new_rect.topleft = (config.SCREEN_WIDTH, first_rect.y)
 
-                images_arr.append(new_rect)
+            images_arr.append(new_rect)
 
         for rect in images_arr:
-            if not state.pause:
-                rect.x -= config.BG_SPEED
+            rect.x -= config.BG_SPEED
+            # utils.draw(screen, image, rect)
+
+    def _drawSprites(
+        self,
+        screen: pygame.Surface,
+        image: pygame.Surface,
+        images_arr: list[pygame.Rect],
+    ):
+        for rect in images_arr:
             utils.draw(screen, image, rect)
 
-    def draw(self, screen: pygame.Surface, state: State):
+    def update(self, state: State):
+        if state.pause:
+            return
+
+        self._updateSprites(state, self.clouds, self.clouds_arr)
+        self._updateSprites(state, self.grass, self.grass_arr)
+
+    def draw(self, screen: pygame.Surface):
 
         pygame.draw.rect(screen, config.SKY_COLOR, self.sky_rect)
         pygame.draw.rect(screen, config.SEA_COLOR, self.sea_rect)
 
-        self._drawSprites(screen, state, self.clouds, self.clouds_arr)
-        self._drawSprites(screen, state, self.grass, self.grass_arr)
+        self._drawSprites(screen, self.clouds, self.clouds_arr)
+        self._drawSprites(screen, self.grass, self.grass_arr)

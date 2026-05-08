@@ -1,20 +1,19 @@
 import pygame
-import config
-import utils
 
-from state import State
+from config import SCREEN_WIDTH, SCREEN_HEIGHT, FPS
+
 from background import Background
 from treeSpawner import TreeSpawner
 from bird import Bird
 
+from state import State
+
+from screens import GamingScreen, PauseScreen
+
 pygame.init()
 
-screen_size = (config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
-
-screen = pygame.display.set_mode(screen_size)
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Fluffy Bird")
-
-clock = pygame.time.Clock()
 
 state = State()
 
@@ -22,40 +21,29 @@ bg = Background()
 treeSpawner = TreeSpawner()
 bird = Bird()
 
-pause_overlay = pygame.Surface(
-    (config.SCREEN_WIDTH, config.SCREEN_HEIGHT), pygame.SRCALPHA
-)
-pause_overlay.fill((0, 0, 0, 125))
-pause_overlay_rect = pygame.Rect(0, 0, config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
+entities = (bg, treeSpawner, bird)
+
+gaming_screen = GamingScreen()
+pause_screen = PauseScreen()
+
+clock = pygame.time.Clock()
 
 running = True
 while running:
-    clock.tick(config.FPS)
+    clock.tick(FPS)
 
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
                 state.pause = not state.pause
-            elif event.key == pygame.K_SPACE:
-                bird.jump(state)
-
-    treeSpawner.update(state)
-    bird.update(state)
-
-    screen.fill((0, 0, 0))
-
-    bg.draw(screen, state)
-    treeSpawner.draw(screen, state)
-    bird.draw(screen)
 
     if state.pause:
-        utils.draw(
-            screen,
-            pause_overlay,
-            pause_overlay_rect,
-        )
+        pause_screen.play(screen, events, state, entities)
+    else:
+        gaming_screen.play(screen, events, state, entities)
 
     pygame.display.flip()
 
