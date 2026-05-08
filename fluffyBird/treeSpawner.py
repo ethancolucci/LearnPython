@@ -77,14 +77,6 @@ class TreeSpawner:
         for _, rect in self.trees:
             rect.x -= config.TREE_VELOCITY
 
-    def _getTreeCollisionRect(self, rect: pygame.Rect) -> pygame.Rect:
-        return pygame.Rect(
-            rect.left + config.TREE_COLLISION_PADDING,
-            rect.top + config.TREE_COLLISION_PADDING,
-            rect.width - 2 * config.TREE_COLLISION_PADDING,
-            rect.height - 2 * config.TREE_COLLISION_PADDING,
-        )
-
     def update(self, state: State):
         if state.pause:
             return
@@ -113,5 +105,7 @@ class TreeSpawner:
 
             # debug draw collision rect
             if config.DEBUG:
-                collision_rect = self._getTreeCollisionRect(rect)
+                collision_rect = utils.createCollisionRect(
+                    rect, config.TREE_COLLISION_PADDING
+                )
                 pygame.draw.rect(screen, (255, 0, 0), collision_rect, 2)

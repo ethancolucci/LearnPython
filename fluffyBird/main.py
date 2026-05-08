@@ -26,6 +26,7 @@ pause_overlay = pygame.Surface(
     (config.SCREEN_WIDTH, config.SCREEN_HEIGHT), pygame.SRCALPHA
 )
 pause_overlay.fill((0, 0, 0, 125))
+pause_overlay_rect = pygame.Rect(0, 0, config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
 
 running = True
 while running:
@@ -50,7 +51,11 @@ while running:
     bird.draw(screen)
 
     if state.pause:
-        utils.draw(screen, pause_overlay, (0, 0))
+        utils.draw(
+            screen,
+            pause_overlay,
+            pause_overlay_rect,
+        )
 
     pygame.display.flip()
 

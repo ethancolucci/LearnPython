@@ -38,12 +38,18 @@ class Bird:
         if state.pause:
             return
 
-        self.velocity_y += config.JUMP_STRENGHT
+        self.velocity_y += config.BIRD_JUMP_STRENGHT
 
-        if self.velocity_y < config.MIN_VELOCITY:
-            self.velocity_y = config.MIN_VELOCITY
-        elif self.velocity_y > config.MAX_VELOCITY:
-            self.velocity_y = config.MAX_VELOCITY
+        if self.velocity_y < config.BIRD_MIN_VELOCITY:
+            self.velocity_y = config.BIRD_MIN_VELOCITY
+        elif self.velocity_y > config.BIRD_MAX_VELOCITY:
+            self.velocity_y = config.BIRD_MAX_VELOCITY
 
     def draw(self, screen: pygame.Surface):
         utils.draw(screen, self.image, self.rect)
+
+        if config.DEBUG:
+            collision_rect = utils.createCollisionRect(
+                self.rect, config.BIRD_COLLISION_PADDING
+            )
+            pygame.draw.rect(screen, (255, 0, 0), collision_rect, 2)
