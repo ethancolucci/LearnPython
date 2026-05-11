@@ -42,6 +42,12 @@ class PauseScreen:
         self.overlay.fill(PAUSE_OVERLAY_COLOR)
         self.overlay_rect = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
+        pause_font = pygame.font.Font(None, 48)
+        self.pause_surface = pause_font.render("PAUSE", True, (255, 255, 255))
+        self.pause_rect = self.pause_surface.get_rect(
+            center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+        )
+
     def play(
         self,
         screen: pygame.Surface,
@@ -56,3 +62,4 @@ class PauseScreen:
         bird.draw(screen)
 
         screen.blit(self.overlay, self.overlay_rect)
+        screen.blit(self.pause_surface, self.pause_rect)
