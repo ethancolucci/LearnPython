@@ -8,7 +8,7 @@ from bird import Bird
 
 from state import State
 
-from screens import GamingScreen, PauseScreen
+from screens import StartScreen, GamingScreen, PauseScreen
 
 pygame.init()
 
@@ -23,6 +23,7 @@ bird = Bird()
 
 entities = (bg, treeSpawner, bird)
 
+start_screen = StartScreen()
 gaming_screen = GamingScreen()
 pause_screen = PauseScreen()
 
@@ -40,10 +41,12 @@ while running:
             if event.key == pygame.K_p:
                 state.pause = not state.pause
 
-    if state.pause:
-        pause_screen.play(screen, events, state, entities)
-    else:
-        gaming_screen.play(screen, events, state, entities)
+    # if state.pause:
+    #     pause_screen.play(screen, events, state, entities)
+    # else:
+    #     gaming_screen.play(screen, events, state, entities)
+
+    start_screen.play(screen, events, state, entities)
 
     pygame.display.flip()
 

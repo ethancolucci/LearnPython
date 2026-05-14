@@ -7,6 +7,38 @@ from background import Background
 from treeSpawner import TreeSpawner
 from bird import Bird
 
+from utils import Button
+
+
+class StartScreen:
+
+    def __init__(self):
+        self.overlay = createOverlay()
+
+        title_font = pygame.font.Font(None, 150)
+        self.title_surface = title_font.render("Fluffy Bird", True, (255, 255, 255))
+        self.title_rect = self.title_surface.get_rect(
+            center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 200)
+        )
+
+        self.start_btn = Button("Start")
+
+    def play(
+        self,
+        screen: pygame.Surface,
+        events: list[pygame.event.Event],
+        state: State,
+        entities: tuple[Background, TreeSpawner, Bird],
+    ):
+        bg = entities[0]
+
+        bg.draw(screen)
+
+        screen.blit(self.overlay[0], self.overlay[1])
+        screen.blit(self.title_surface, self.title_rect)
+
+        self.start_btn.draw(screen, (300, 300), hover=True)
+
 
 class GamingScreen:
 
@@ -38,9 +70,7 @@ class GamingScreen:
 class PauseScreen:
 
     def __init__(self):
-        self.overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
-        self.overlay.fill(PAUSE_OVERLAY_COLOR)
-        self.overlay_rect = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.overlay = createOverlay()
 
         pause_font = pygame.font.Font(None, 48)
         self.pause_surface = pause_font.render("PAUSE", True, (255, 255, 255))
@@ -61,5 +91,12 @@ class PauseScreen:
         treeSpawner.draw(screen)
         bird.draw(screen)
 
-        screen.blit(self.overlay, self.overlay_rect)
+        screen.blit(self.overlay[0], self.overlay[1])
         screen.blit(self.pause_surface, self.pause_rect)
+
+
+def createOverlay():
+    surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+    surface.fill(PAUSE_OVERLAY_COLOR)
+    rect = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+    return surface, rect

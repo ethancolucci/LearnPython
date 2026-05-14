@@ -1,5 +1,6 @@
 import pygame
 
+
 from config import DEBUG, DEBUG_COLOR, DEBUG_FONT, DEBUG_FONT_SIZE, DEBUG_WIDTH
 
 
@@ -37,3 +38,48 @@ def draw(screen: pygame.Surface, surface: pygame.Surface, rect: pygame.Rect):
     if not d:
         d = Debug()
     d.draw(screen, surface, rect)
+
+
+class Button:
+
+    def __init__(
+        self,
+        text: str,
+        fontSize: int = 40,
+        bgSize: tuple[int, int] = (250, 80),
+        bgColor: pygame.Color = (255, 255, 255),
+        bgHoverColor: pygame.Color = (0, 0, 0),
+        textColor: pygame.Color = (0, 0, 0),
+        textHoverColor: pygame.Color = (255, 255, 255),
+    ):
+        self.text = text
+        self.font = pygame.font.Font(None, fontSize)
+
+        self.bgSize = bgSize
+
+        self.bgColor = bgColor
+        self.bgHoverColor = bgHoverColor
+        self.textColor = textColor
+        self.textHoverColor = textHoverColor
+
+    def draw(self, screen: pygame.Surface, pos: tuple[int, int], hover: bool = False):
+        bg_color = self.bgHoverColor if hover else self.bgColor
+        text_color = self.textHoverColor if hover else self.textColor
+
+        bg_rect = pygame.Rect(
+            pos[0] - self.bgSize[0] // 2,
+            pos[1] - self.bgSize[1] // 2,
+            self.bgSize[0],
+            self.bgSize[1],
+        )
+
+        text = self.font.render(self.text, True, text_color)
+        text_rect = text.get_rect(center=pos)
+
+        pygame.draw.rect(
+            screen,
+            bg_color,
+            bg_rect,
+            border_radius=10,
+        )
+        screen.blit(text, text_rect)
